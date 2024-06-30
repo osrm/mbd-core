@@ -1,0 +1,4 @@
+pip
+# To avoid backwards-incompatible changes in version 5
+importlib-metadata<5.0
+tomli>=2.0

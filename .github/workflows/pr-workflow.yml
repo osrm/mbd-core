@@ -1,0 +1,11 @@
+name: PR Workflow
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  PR-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make lint
+      - run: make test
