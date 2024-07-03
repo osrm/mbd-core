@@ -29,7 +29,7 @@ def get_requirements(requirements_file):
 
 setup(
     name="mbd_core",
-    version="0.0.1" + FROZEN_VERSION,
+    version="0.0.2" + FROZEN_VERSION,
     description="""mbd core packages.""",
     author="Feng Shi",
     author_email="feng@mbd.xyz",

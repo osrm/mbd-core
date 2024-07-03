@@ -9,6 +9,7 @@ from mbd_core.data.schema import INTERACTION_SCHEMA, ITEM_META_SCHEMA, USER_META
 
 def test_get_item_df(farcaster_casts_dataframe):
     item_df = get_item_df(farcaster_casts_dataframe)
+    assert item_df.shape[0] == farcaster_casts_dataframe.shape[0]
     ITEM_META_SCHEMA.validate(item_df)
 
 

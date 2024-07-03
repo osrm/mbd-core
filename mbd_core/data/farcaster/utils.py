@@ -2,15 +2,59 @@
 
 import asyncio
 import json
-import os
+import re
 import time
 from typing import cast
 
 import aiohttp
+import emoji
 import pandas as pd
 from aiohttp.client_exceptions import ContentTypeError
 
-EMBEDS_METADATA_URL = os.getenv("EMBEDS_METADATA_URL")
+EMBEDS_METADATA_URL = "https://api.modprotocol.org/api/cast-embeds-metadata/by-url"
+
+MIN_TEXT_LENGTH = 20
+
+
+def filter_text(text: str) -> bool:
+    """Filter text based on length at least larger than 20."""
+    return not len(text) <= MIN_TEXT_LENGTH
+
+
+def remove_emojis(text: str) -> str:
+    """Remove emojis from the text."""
+    return emoji.replace_emoji(text, replace="")
+
+
+def remove_degen(text: str) -> str:
+    """Remove degen. Regex to find "$degen" with optional space and adjacent numbers, case-insensitive."""
+    pattern = r"(\d*\s*\$[\s]*degen\s*\d*)"
+    return re.sub(pattern, "", text, flags=re.IGNORECASE)
+
+
+def transform_text(text: str) -> str:
+    """Remove urls from text."""
+    url_pattern = re.compile(r"https?://[^\s]+")
+    return url_pattern.sub("", text)
+
+
+def clean_text(item_df: pd.DataFrame, text_col: str, time_col: str) -> pd.DataFrame:
+    """Clean text column in the item_df."""
+    # transform cast text
+    item_df[text_col] = item_df[text_col].apply(transform_text)
+    # Apply emoji removal
+    item_df[text_col] = item_df[text_col].apply(remove_emojis)
+    # Apply degen term removal
+    item_df[text_col] = item_df[text_col].apply(remove_degen)
+
+    # Filter items with less than 10 characters
+    item_df = item_df[item_df[text_col].apply(filter_text)].copy()
+    # Filter duplicate items
+    return (
+        item_df.sort_values(time_col, ascending=False)
+        .drop_duplicates(text_col)
+        .reset_index(drop=True)
+    )
 
 
 async def get_urls_metadata(urls: list[str], session: aiohttp.ClientSession) -> dict:
@@ -20,7 +64,7 @@ async def get_urls_metadata(urls: list[str], session: aiohttp.ClientSession) -> 
     while True:
         try:
             async with session.post(
-                cast(str, EMBEDS_METADATA_URL), headers=headers, data=params
+                EMBEDS_METADATA_URL, headers=headers, data=params
             ) as response:
                 result = await response.json()
                 return cast(dict, result)
