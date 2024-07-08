@@ -68,7 +68,7 @@ INTERACTION_SCHEMA = pa.DataFrameSchema(
         APP_COLUMN: pa.Column(str, nullable=True, required=False),
         CONTEXT_COLUMN: pa.Column(str, nullable=True, required=False),
     },
-    strict=True,
+    strict=False,
 )
 
 # ITEM schema
@@ -112,7 +112,7 @@ ITEM_META_SCHEMA = pa.DataFrameSchema(
         EMBED_ITEMS_COLUMN: pa.Column(list[str], nullable=True, required=False),
         EMBED_USERS_COLUMN: pa.Column(list[str], nullable=True, required=False),
     },
-    strict=True,
+    strict=False,
 )
 
 # USER schema
@@ -131,7 +131,7 @@ USER_META_SCHEMA = pa.DataFrameSchema(
         USER_UPDATE_TIME_COLUMN: pa.Column("datetime64[ns, UTC]"),
         USER_PROFILE_COLUMN: pa.Column(str, nullable=True, required=False),
     },
-    strict=True,
+    strict=False,
 )
 
 

@@ -29,7 +29,7 @@ def get_requirements(requirements_file):
 
 setup(
     name="mbd_core",
-    version="0.0.2" + FROZEN_VERSION,
+    version="0.0.3" + FROZEN_VERSION,
     description="""mbd core packages.""",
     author="Feng Shi",
     author_email="feng@mbd.xyz",
@@ -41,6 +41,9 @@ setup(
             "mbd_core.*",
         ]
     ),
+    package_data={
+        "mbd_core.enrich.labelling": ["config.json"],
+    },
 
     install_requires=get_requirements(REQUIREMENTS_FILE),
     zip_safe=False,
