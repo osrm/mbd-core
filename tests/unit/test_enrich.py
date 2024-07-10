@@ -24,14 +24,29 @@ def test_label_config():
 def test_enrich_schema():
     item_df = pd.DataFrame(
         {
+            "item_id": ["1", "2"],
             "item_sem_embed": [[1, 2, 3], [4, 5, 6]],
             **{label: [1.0, 0.0] for label in load_label_columns()},
+            "ai_labels": [["label1"], ["label2"]],
         }
     )
     user_df = pd.DataFrame(
         {
-            "user_sem_embed": [np.array([1, 2, 3]), np.array([4, 5, 6])],
-            **{label: np.array([1.0, 0.0]) for label in load_label_columns()},
+            "user_id": ["1", "2"],
+            "protocol": ["farcaster", "mirror"],
+            "user_update_timestamp": pd.Series(
+                pd.to_datetime(["2021-01-01", "2021-01-02"])
+            ).dt.tz_localize("UTC"),
+            "user_sem_embed": pd.Series(
+                [
+                    {"total": np.array([4, 5, 6])},
+                    {"total": np.array([4, 5, 6])},
+                ]
+            ),
+            **{
+                label: pd.Series([{"total": 0.1}, {"total": 0.1}])
+                for label in load_label_columns()
+            },
         }
     )
     ITEM_ENRICH_SCHEMA.validate(item_df)

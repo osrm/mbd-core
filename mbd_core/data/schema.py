@@ -119,6 +119,7 @@ ITEM_META_SCHEMA = pa.DataFrameSchema(
 USER_CREATION_TIME_COLUMN = "user_creation_timestamp"
 USER_UPDATE_TIME_COLUMN = "user_update_timestamp"
 USER_PROFILE_COLUMN = "profile"
+WALLET_ADDRESSES_COLUMN = "wallet_addresses"
 
 USER_META_SCHEMA = pa.DataFrameSchema(
     {
@@ -126,7 +127,7 @@ USER_META_SCHEMA = pa.DataFrameSchema(
         PROTOCOL_COLUMN: pa.Column(
             str, checks=pa.Check.isin([prc.value for prc in PROTOCOLS])
         ),
-        APP_COLUMN: pa.Column(str, nullable=True, required=False),
+        WALLET_ADDRESSES_COLUMN: pa.Column(list[str], nullable=True, required=False),
         USER_CREATION_TIME_COLUMN: pa.Column("datetime64[ns, UTC]"),
         USER_UPDATE_TIME_COLUMN: pa.Column("datetime64[ns, UTC]"),
         USER_PROFILE_COLUMN: pa.Column(str, nullable=True, required=False),
