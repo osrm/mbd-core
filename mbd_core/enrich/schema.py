@@ -7,7 +7,9 @@ import pandas as pd
 import pandera as pa
 
 from mbd_core.data.schema import (
+    EDGE_TYPE_COLUMN,
     ITEM_COLUMN,
+    MBD_ID_COLUMN,
     PROTOCOL_COLUMN,
     USER_COLUMN,
     USER_UPDATE_TIME_COLUMN,
@@ -20,7 +22,6 @@ ITEM_SEM_EMBED_COLUMN = "item_sem_embed"
 ITEM_AI_LABELS_COLUMN = "ai_labels"
 
 USER_SEM_EMBED_COLUMN = "user_sem_embed"
-MBD_ID_COLUMN = "mbd_id"
 
 
 def _check_sequence(x: pd.Series) -> bool:
@@ -43,11 +44,11 @@ USER_ENRICH_SCHEMA = pa.DataFrameSchema(
         PROTOCOL_COLUMN: pa.Column(str),
         USER_UPDATE_TIME_COLUMN: pa.Column("datetime64[ns, UTC]"),
         MBD_ID_COLUMN: pa.Column(str, nullable=True, required=False),
-        USER_SEM_EMBED_COLUMN: pa.Column(dict, nullable=True, required=False),
-        **{
-            label: pa.Column(dict, nullable=True, required=False)
-            for label in LABEL_COLUMNS
-        },
+        EDGE_TYPE_COLUMN: pa.Column(str),  # for different namespace in pinecone
+        USER_SEM_EMBED_COLUMN: pa.Column(
+            checks=pa.Check(_check_sequence), nullable=True
+        ),
+        **{label: pa.Column(float, nullable=True) for label in LABEL_COLUMNS},
     },
     strict=False,
 )

@@ -120,6 +120,10 @@ USER_CREATION_TIME_COLUMN = "user_creation_timestamp"
 USER_UPDATE_TIME_COLUMN = "user_update_timestamp"
 USER_PROFILE_COLUMN = "profile"
 WALLET_ADDRESSES_COLUMN = "wallet_addresses"
+USER_NAME_COLUMN = "username"
+USER_PHOTO_URL_COLUMN = "photo_url"
+MBD_ID_COLUMN = "mbd_id"
+
 
 USER_META_SCHEMA = pa.DataFrameSchema(
     {
@@ -127,10 +131,43 @@ USER_META_SCHEMA = pa.DataFrameSchema(
         PROTOCOL_COLUMN: pa.Column(
             str, checks=pa.Check.isin([prc.value for prc in PROTOCOLS])
         ),
+        MBD_ID_COLUMN: pa.Column(str, required=False),
         WALLET_ADDRESSES_COLUMN: pa.Column(list[str], nullable=True, required=False),
         USER_CREATION_TIME_COLUMN: pa.Column("datetime64[ns, UTC]"),
         USER_UPDATE_TIME_COLUMN: pa.Column("datetime64[ns, UTC]"),
         USER_PROFILE_COLUMN: pa.Column(str, nullable=True, required=False),
+        USER_PHOTO_URL_COLUMN: pa.Column(str, nullable=True, required=False),
+        USER_NAME_COLUMN: pa.Column(str, nullable=True, required=False),
+    },
+    strict=False,
+)
+
+
+# user-user schema
+USER1_COLUMN = "user1"
+USER2_COLUMN = "user2"
+USER_INTERACTION_TIME_COLUMN = "user_interaction_timestamp"
+USER_INTERACTION_TYPE_COLUMN = "user_interaction_type"
+
+
+class USER_INTERACTION_TYPES(Enum):  # noqa: N801
+    """Event types for interactions."""
+
+    follow = "follow"
+
+
+USER_INTERACTION_SCHEMA = pa.DataFrameSchema(
+    {
+        USER1_COLUMN: pa.Column(str),
+        USER2_COLUMN: pa.Column(str),
+        USER_INTERACTION_TIME_COLUMN: pa.Column("datetime64[ns, UTC]"),
+        USER_INTERACTION_TYPE_COLUMN: pa.Column(
+            str, checks=pa.Check.isin([et.value for et in USER_INTERACTION_TYPES])
+        ),
+        PROTOCOL_COLUMN: pa.Column(
+            str, checks=pa.Check.isin([prc.value for prc in PROTOCOLS])
+        ),
+        APP_COLUMN: pa.Column(str, nullable=True, required=False),
     },
     strict=False,
 )

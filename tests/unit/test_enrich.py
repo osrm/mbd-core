@@ -37,16 +37,9 @@ def test_enrich_schema():
             "user_update_timestamp": pd.Series(
                 pd.to_datetime(["2021-01-01", "2021-01-02"])
             ).dt.tz_localize("UTC"),
-            "user_sem_embed": pd.Series(
-                [
-                    {"total": np.array([4, 5, 6])},
-                    {"total": np.array([4, 5, 6])},
-                ]
-            ),
-            **{
-                label: pd.Series([{"total": 0.1}, {"total": 0.1}])
-                for label in load_label_columns()
-            },
+            "user_sem_embed": [np.array([1, 2, 3]), np.array([4, 5, 6])],
+            "event_type": ["like", "share"],
+            **{label: pd.Series([0.1, 0.2]) for label in load_label_columns()},
         }
     )
     ITEM_ENRICH_SCHEMA.validate(item_df)
