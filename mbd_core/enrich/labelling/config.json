@@ -121,7 +121,8 @@
         "hf_task": "text-classification",
         "mme_reference": "spam_model",
         "artifact_location": "s3://mbd-mme-models/model_tars/spam_model.tar.gz",
-        "lang": ["en"]
+        "lang": ["en"],
+        "preprocess_text": ["remove_urls"]
     },
     "embedding": {
         "type": "embedding",
