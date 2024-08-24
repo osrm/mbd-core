@@ -17,7 +17,7 @@
         "threshold": 0.7,
         "apply_softmax": false,
         "model_length": 512,
-        "hf_model_id": "cardiffnlp/twitter-roberta-base-emotion-latest",
+        "hf_model_id": "cardiffnlp/twitter-roberta-base-emotion-multilabel-latest",
         "hf_task": "text-classification",
         "mme_reference": "emotions_model",
         "artifact_location": "s3://mbd-mme-models/model_tars/emotions_model.tar.gz",
