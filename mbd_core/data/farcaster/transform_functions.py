@@ -1,5 +1,7 @@
 """Transformation functions for farcaster data."""
 
+import re
+
 import pandas as pd  # comment this line if you want to use modin
 from ftlangdetect import detect as ftdetect
 from pandas.api.types import is_datetime64_ns_dtype
@@ -71,9 +73,10 @@ def get_item_df(
     item_df = derive_root_item_column(item_df)
 
     # enrich url metadata
-    item_df[EMBED_ITEMS_COLUMN] = item_df["embeds"].apply(
-        lambda xs: [x["url"] for x in xs if "url" in x and x["url"] is not None]
+    item_df[EMBED_ITEMS_COLUMN] = item_df["text"].apply(
+        lambda txt: re.findall(r"https?://\S+", txt)
     )
+
     item_df = enrich_df_with_url_metadata(
         df=item_df,
         url_column=EMBED_ITEMS_COLUMN,
