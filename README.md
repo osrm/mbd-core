@@ -1,6 +1,6 @@
 # Introduction
 
-This is the repository to define mbd unified data schema such that all the data sources from different protocols can be merged/combined into a same data schema. The unified schema include (and will include) four types of schema:
+This is the repository to define mbd unified data schema such that all the data sources from different protocols can be merged/combined into the same data schema. The unified schema include (and will include) four types of schema:
 - item schema
 - interaction schema (user-item) 
 - user schema
@@ -21,7 +21,7 @@ pip install mbd-core
 ```
 
 ### 2. Use schema column names
-Use the column name of the defined in your code to avoid hard-coding
+Use the defined column names in your code to avoid hard-coding
 ```
 from mbd_core.data.schema import (
     AUTHOR_ID_COLUMN,
@@ -33,7 +33,7 @@ from mbd_core.data.schema import (
     ITEM_TEXT_COLUMN,
 )
 
-### use these column in your code
+### Use these columns in your code
 df[ITEM_TEXT_COLUMN] =
 ```
 
